@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-lts
+    container_name: mssql-dev
+    restart: always
+    env_file:
+      - .env
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: ${MSSQL_PID:-Developer}
+      MSSQL_TCP_PORT: ${MSSQL_TCP_PORT:-1433}
+      MSSQL_COLLATION: ${MSSQL_COLLATION:-Latin1_General_CI_AI}
+    ports:
+      - '${MSSQL_TCP_PORT:-1433}:1433'
+    volumes:
+      - mssqldata:/var/opt/mssql
+    networks:
+      - mssql-net
+
+volumes:
+  mssqldata:
+
+networks:
+  mssql-net:
